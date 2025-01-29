@@ -1,3 +1,5 @@
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 pluginManagement {
     repositories {
         google()
@@ -5,6 +7,7 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -14,4 +17,16 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Exrate"
-include(":app")
+
+include(
+    ":app",
+    ":core",
+    ":datastore:currency",
+    ":feature:coin",
+    ":feature:currency-api",
+    ":feature:currency-impl",
+    ":feature:select-currency",
+    ":feature:settings",
+    ":network",
+    ":widget"
+)

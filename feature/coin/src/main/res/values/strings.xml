@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="coin_details_market_cap_rank">Market cap rank</string>
+    <string name="coin_details_market_cap">Market cap</string>
+    <string name="coin_details_current_price">Current price</string>
+</resources>

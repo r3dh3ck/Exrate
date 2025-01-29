@@ -5,5 +5,14 @@ import com.example.exrate.di.AppComponent
 import com.example.exrate.di.DaggerAppComponent
 
 class ExrateApplication : Application() {
-    val appComponent: AppComponent = DaggerAppComponent.create()
+
+    val appComponent: AppComponent by lazy {
+        DaggerAppComponent.factory().create(this)
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        ComponentInitializer(appComponent).initialize()
+        appComponent.initializer.initialize()
+    }
 }

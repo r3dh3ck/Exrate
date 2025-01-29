@@ -1,45 +1,32 @@
 package com.example.exrate.ui
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
-import com.example.exrate.di.ViewModelFactory
-import com.example.exrate.domain.Currency
-import com.example.exrate.ui.details.DetailsScreen
-import com.example.exrate.ui.main.MainScreen
+import com.example.feature.coin.navigation.CoinDestination
+import com.example.feature.coin.navigation.coinDestination
+import com.example.feature.selectcurrency.navigation.SelectCurrencyDestination
+import com.example.feature.selectcurrency.navigation.selectCurrencyDestination
+import com.example.feature.settings.navigation.SettingsDestination
+import com.example.feature.settings.navigation.settingsDestination
 
 @Composable
-fun App(
-    viewModelFactory: ViewModelFactory
-) {
+fun App() {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = Screen.Main
+        startDestination = CoinDestination
     ) {
-        composable<Screen.Main> {
-            MainScreen(
-                viewModel = viewModel(factory = viewModelFactory),
-                onCurrencyClicked = remember { navController::openCurrencyDetails }
-            )
-        }
-        composable<Screen.Details> { backStackEntry ->
-            val route = backStackEntry.toRoute<Screen.Details>()
-            DetailsScreen(
-                viewModel = viewModel(factory = viewModelFactory),
-                currencyId = route.currencyId,
-                onBack = remember { { navController.popBackStack() } }
-            )
-        }
+        coinDestination(
+            navController = navController,
+            onSettingsClicked = { navController.navigate(SettingsDestination) }
+        )
+        settingsDestination(
+            onBack = { navController.popBackStack() },
+            onCurrencyClicked = { navController.navigate(SelectCurrencyDestination) }
+        )
+        selectCurrencyDestination(
+            onBack = { navController.popBackStack() }
+        )
     }
-}
-
-private fun NavController.openCurrencyDetails(currency: Currency) {
-    val route = Screen.Details(currency.id)
-    navigate(route)
 }

@@ -1,7 +1,0 @@
-<resources>
-    <string name="app_name">Exrate</string>
-    <string name="internal_error">Internal error. Please try again</string>
-    <string name="currency_details_market_cap_rank">Market cap rank</string>
-    <string name="currency_details_market_cap">Market cap</string>
-    <string name="currency_details_current_price">Current price</string>
-</resources>
