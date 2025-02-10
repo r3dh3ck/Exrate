@@ -4,6 +4,8 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import com.example.datastore.currency.CurrencyDataStore
 import com.example.feature.coin.data.CoinRepositoryImpl
+import com.example.feature.coin.domain.CoinPaginationUseCase
+import com.example.feature.coin.domain.CoinPaginationUseCaseImpl
 import com.example.feature.coin.domain.CoinRepository
 import com.example.network.CoingeckoApi
 import dagger.Module
@@ -20,5 +22,12 @@ internal object CoinModule {
     ): CoinRepository {
         val currencyDataStore = CurrencyDataStore(dataStore)
         return CoinRepositoryImpl(api, currencyDataStore)
+    }
+
+    @Provides
+    fun provideCoinPaginationUseCase(
+        repository: CoinRepository
+    ): CoinPaginationUseCase {
+        return CoinPaginationUseCaseImpl(repository)
     }
 }

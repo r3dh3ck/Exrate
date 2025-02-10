@@ -28,14 +28,20 @@ class DetailsTest {
     @Test
     fun success() = runTest {
         coEvery { dataStore.getSelectedCurrency() } returns Currency.USD
-        coEvery { api.getMarkets("usd") } returns coinResponseList
+        coEvery {
+            api.getMarkets(
+                vsCurrency = "usd",
+                perPage = 20,
+                page = 1
+            )
+        } returns coinResponseList
         val successState = DetailsState(
             topAppBarTitle = "Ethereum",
             coinDetails = CoinDetailsState.Content(ethereumCoin)
         )
         viewModel.state.test {
             assertEquals(initState, awaitItem())
-            repository.getCoinList()
+            repository.getCoinList(pageSize = 20, page = 1)
             viewModel.getCoin("eth")
             assertEquals(successState, awaitItem())
         }

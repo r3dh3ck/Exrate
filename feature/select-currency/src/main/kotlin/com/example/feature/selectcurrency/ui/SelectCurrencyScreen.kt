@@ -1,7 +1,13 @@
 package com.example.feature.selectcurrency.ui
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -27,12 +33,13 @@ const val SELECT_CURRENCY_SCREEN_TEST_TAG = "select_currency_screen_test_tag"
 
 @Composable
 internal fun SelectCurrencyScreen(
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    onCurrencySelected: () -> Unit
 ) {
     val component = SelectCurrencyComponentHolder.get()
     val viewModelFactory = component.viewModelFactory
     val viewModel = viewModel<SelectCurrencyViewModel>(factory = viewModelFactory)
-    SelectCurrencyEffect(viewModel, onBack)
+    SelectCurrencyEffect(viewModel, onCurrencySelected)
     SelectCurrencyScreen(viewModel, onBack)
 }
 
@@ -90,6 +97,9 @@ private fun SelectCurrencyScreen(
     ) { paddingValues ->
         Column(
             modifier = Modifier.padding(paddingValues)
+                .windowInsetsPadding(
+                    WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal)
+                )
         ) {
             QueryWidget(
                 query = state.query,
@@ -97,7 +107,10 @@ private fun SelectCurrencyScreen(
             )
             CurrencyListWidget(
                 state = state.currencyList,
-                onCurrencyClicked = onCurrencyClicked
+                onCurrencyClicked = onCurrencyClicked,
+                contentPadding = WindowInsets.safeDrawing
+                    .only(WindowInsetsSides.Bottom)
+                    .asPaddingValues()
             )
         }
     }

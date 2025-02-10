@@ -19,7 +19,9 @@ fun NavGraphBuilder.coinDestination(
         startDestination = CoinDestination.MainScreen
     ) {
         composable<CoinDestination.MainScreen> {
+            val result = navController.onSelectCurrencyResult()
             MainScreen(
+                selectCurrencyResult = result,
                 onCoinClicked = remember { navController::openCoinDetails },
                 onSettingsClicked = onSettingsClicked,
             )
@@ -37,4 +39,10 @@ fun NavGraphBuilder.coinDestination(
 private fun NavController.openCoinDetails(coin: Coin) {
     val route = CoinDestination.DetailsScreen(coin.id)
     navigate(route)
+}
+
+private fun NavController.onSelectCurrencyResult(): SelectCurrencyResult {
+    val savedStateHandle = getBackStackEntry<CoinDestination>().savedStateHandle
+    val result = savedStateHandle.remove<SelectCurrencyResult>(SelectCurrencyResult.KEY)
+    return result ?: SelectCurrencyResult.EMPTY
 }

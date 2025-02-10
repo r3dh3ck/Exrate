@@ -3,29 +3,33 @@ package com.example.feature.coin.data
 import com.example.datastore.currency.CurrencyDataStore
 import com.example.feature.coin.domain.Coin
 import com.example.feature.coin.domain.CoinRepository
-import com.example.feature.currency.Currency
 import com.example.network.CoingeckoApi
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
+import java.util.concurrent.ConcurrentHashMap
 
 internal class CoinRepositoryImpl(
     private val coingeckoApi: CoingeckoApi,
     private val dataStore: CurrencyDataStore
 ) : CoinRepository {
 
-    @Volatile
-    private var coinCache: CoinCache? = null
-    private val mutex = Mutex()
+    private val coinCache = ConcurrentHashMap<String, Coin>()
 
-    override suspend fun getCoinList(): Result<List<Coin>> {
+    override suspend fun getCoinList(pageSize: Int, page: Int): Result<List<Coin>> {
         return runCatching {
             val currency = dataStore.getSelectedCurrency()
-            getCoinList(currency)
+            val coinList = coingeckoApi.getMarkets(
+                vsCurrency = currency.name,
+                perPage = pageSize,
+                page = page
+            ).map { coinResponse ->
+                coinResponse.toCoin(currency)
+            }
+            coinList.associateByTo(coinCache) { coin -> coin.id }
+            coinList
         }
     }
 
     override suspend fun getCoin(id: String): Result<Coin> {
-        val coin = coinCache?.list?.find { currency -> currency.id == id }
+        val coin = coinCache[id]
         return if (coin != null) {
             Result.success(coin)
         } else {
@@ -33,26 +37,4 @@ internal class CoinRepositoryImpl(
             Result.failure(exception)
         }
     }
-
-    private suspend fun getCoinList(currency: Currency): List<Coin> {
-        var cache = coinCache
-        if (cache != null && cache.currency == currency) {
-            return cache.list
-        }
-        mutex.withLock {
-            cache = coinCache
-            if (cache != null && cache.currency == currency) {
-                return cache.list
-            }
-            val coinList = coingeckoApi.getMarkets(currency.name)
-                .map { currencyResponse -> currencyResponse.toCoin(currency) }
-            coinCache = CoinCache(coinList, currency)
-            return coinList
-        }
-    }
-
-    private class CoinCache(
-        val list: List<Coin>,
-        val currency: Currency
-    )
 }

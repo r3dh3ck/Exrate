@@ -5,9 +5,10 @@ import androidx.navigation.compose.composable
 import com.example.feature.selectcurrency.ui.SelectCurrencyScreen
 
 fun NavGraphBuilder.selectCurrencyDestination(
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    onCurrencySelected: () -> Unit
 ) {
     composable<SelectCurrencyDestination> {
-        SelectCurrencyScreen(onBack)
+        SelectCurrencyScreen(onBack, onCurrencySelected)
     }
 }

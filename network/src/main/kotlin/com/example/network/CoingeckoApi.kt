@@ -8,7 +8,11 @@ interface CoingeckoApi {
     @GET("coins/markets")
     suspend fun getMarkets(
         @Query("vs_currency")
-        vsCurrency: String
+        vsCurrency: String,
+        @Query("per_page")
+        perPage: Int,
+        @Query("page")
+        page: Int
     ): List<CoinResponse>
 
     @GET("simple/supported_vs_currencies")

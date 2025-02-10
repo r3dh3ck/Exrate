@@ -2,7 +2,11 @@ package com.example.widget
 
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -34,11 +38,13 @@ fun TopAppBarWidget(
     TopAppBar(
         title = { Text(title) },
         windowInsets = WindowInsets.statusBars,
-        modifier = modifier,
         navigationIcon = navigationIcon,
         actions = actions,
         backgroundColor = MaterialTheme.colors.surface,
-        elevation = 0.dp
+        elevation = 0.dp,
+        modifier = modifier.windowInsetsPadding(
+            WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal)
+        )
     )
 }
 

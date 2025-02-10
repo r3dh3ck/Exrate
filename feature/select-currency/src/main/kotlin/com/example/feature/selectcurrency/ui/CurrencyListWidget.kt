@@ -3,6 +3,7 @@ package com.example.feature.selectcurrency.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -36,6 +37,7 @@ const val CURRENCY_ITEM_CHECK_ICON_TEST_TAG = "currency_item_check_icon_test_tag
 @Composable
 internal fun CurrencyListWidget(
     state: CurrencyListState,
+    contentPadding: PaddingValues,
     onCurrencyClicked: (Currency) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -43,6 +45,7 @@ internal fun CurrencyListWidget(
         is CurrencyListState.Loading -> Loading(modifier)
         is CurrencyListState.Content -> Content(
             items = state.items,
+            contentPadding = contentPadding,
             onCurrencyClicked = onCurrencyClicked,
             modifier = modifier
         )
@@ -64,10 +67,12 @@ private fun Loading(modifier: Modifier) {
 @Composable
 private fun Content(
     items: ImmutableList<SelectableCurrency>,
+    contentPadding: PaddingValues,
     onCurrencyClicked: (Currency) -> Unit,
     modifier: Modifier
 ) {
     LazyColumn(
+        contentPadding = contentPadding,
         modifier = modifier.testTag(CURRENCY_LIST_WIDGET_TEST_TAG)
     ) {
         itemsIndexed(items) { index, selectableCurrency ->
@@ -125,6 +130,7 @@ private fun Error(modifier: Modifier) {
 private fun LoadingPreview() {
     CurrencyListWidget(
         state = CurrencyListState.Loading,
+        contentPadding = PaddingValues(),
         onCurrencyClicked = {}
     )
 }
@@ -149,6 +155,7 @@ private fun ContentPreview() {
     val state = CurrencyListState.Content(items)
     CurrencyListWidget(
         state = state,
+        contentPadding = PaddingValues(),
         onCurrencyClicked = {}
     )
 }
@@ -158,6 +165,7 @@ private fun ContentPreview() {
 private fun ErrorPreview() {
     CurrencyListWidget(
         state = CurrencyListState.Error,
+        contentPadding = PaddingValues(),
         onCurrencyClicked = {}
     )
 }
