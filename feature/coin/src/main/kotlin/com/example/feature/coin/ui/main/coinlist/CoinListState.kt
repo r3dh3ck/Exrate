@@ -1,7 +1,7 @@
 package com.example.feature.coin.ui.main.coinlist
 
 import androidx.compose.runtime.Immutable
-import com.example.feature.coin.domain.Coin
+import com.example.feature.coin.ui.main.coinlist.item.CoinItem
 import kotlinx.collections.immutable.ImmutableList
 
 @Immutable
@@ -12,7 +12,7 @@ internal sealed interface CoinListState {
     data object Error : CoinListState
 
     data class Content(
-        val items: ImmutableList<Coin>,
+        val items: ImmutableList<CoinItem>,
         val loadMore: LoadState,
         val refresh: LoadState
     ) : CoinListState

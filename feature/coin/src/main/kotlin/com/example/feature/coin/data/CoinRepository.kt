@@ -2,18 +2,16 @@ package com.example.feature.coin.data
 
 import com.example.datastore.currency.CurrencyDataStore
 import com.example.feature.coin.domain.Coin
-import com.example.feature.coin.domain.CoinRepository
 import com.example.network.CoingeckoApi
-import java.util.concurrent.ConcurrentHashMap
 
-internal class CoinRepositoryImpl(
+internal class CoinRepository(
     private val coingeckoApi: CoingeckoApi,
     private val dataStore: CurrencyDataStore
-) : CoinRepository {
+) {
 
-    private val coinCache = ConcurrentHashMap<String, Coin>()
+    private val coinCache = mutableMapOf<String, Coin>()
 
-    override suspend fun getCoinList(pageSize: Int, page: Int): Result<List<Coin>> {
+    suspend fun getCoinList(pageSize: Int, page: Int): Result<List<Coin>> {
         return runCatching {
             val currency = dataStore.getSelectedCurrency()
             val coinList = coingeckoApi.getMarkets(
@@ -28,7 +26,7 @@ internal class CoinRepositoryImpl(
         }
     }
 
-    override suspend fun getCoin(id: String): Result<Coin> {
+    fun getCoin(id: String): Result<Coin> {
         val coin = coinCache[id]
         return if (coin != null) {
             Result.success(coin)

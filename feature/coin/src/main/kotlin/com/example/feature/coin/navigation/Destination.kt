@@ -7,7 +7,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.toRoute
-import com.example.feature.coin.domain.Coin
 import com.example.feature.coin.ui.details.DetailsScreen
 import com.example.feature.coin.ui.main.MainScreen
 
@@ -22,7 +21,7 @@ fun NavGraphBuilder.coinDestination(
             val result = navController.onSelectCurrencyResult()
             MainScreen(
                 selectCurrencyResult = result,
-                onCoinClicked = remember { navController::openCoinDetails },
+                onCoinClicked = navController::openCoinDetails,
                 onSettingsClicked = onSettingsClicked,
             )
         }
@@ -36,8 +35,8 @@ fun NavGraphBuilder.coinDestination(
     }
 }
 
-private fun NavController.openCoinDetails(coin: Coin) {
-    val route = CoinDestination.DetailsScreen(coin.id)
+private fun NavController.openCoinDetails(coinId: String) {
+    val route = CoinDestination.DetailsScreen(coinId)
     navigate(route)
 }
 

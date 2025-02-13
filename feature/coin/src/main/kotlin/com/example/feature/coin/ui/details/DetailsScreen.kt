@@ -17,7 +17,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.feature.coin.di.CoinComponentHolder
-import com.example.feature.coin.domain.Coin
 import com.example.widget.TopAppBarWidget
 
 const val DETAILS_SCREEN_TEST_TAG = "details_screen_test_tag"
@@ -79,10 +78,10 @@ private fun DetailsScreen(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun DetailsScreenPreview() {
-    val coin = Coin.newInstance(
+    val coin = CoinDetailsUiModel(
         name = "Ethereum",
-        price = "3250.50",
-        marketCap = "1000000000",
+        price = "3,250.50 USD",
+        marketCap = "1,000,000,000 USD",
         rank = "2"
     )
     val state = DetailsState(

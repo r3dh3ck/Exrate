@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.feature.coin.domain.Coin
 import com.example.feature.coin.domain.CoinPaginationUseCase
 import com.example.feature.coin.navigation.SelectCurrencyResult
+import com.example.feature.coin.ui.main.coinlist.CoinListMapper
 import com.example.feature.coin.ui.main.coinlist.CoinListState
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,6 +22,7 @@ internal class MainViewModel(
     private val useCase: CoinPaginationUseCase
 ) : ViewModel() {
 
+    private val coinListMapper = CoinListMapper()
     private val _state = MutableStateFlow<CoinListState>(CoinListState.Loading)
     private val _effect = Channel<MainEffect>(capacity = Channel.BUFFERED)
     val state: StateFlow<CoinListState> = stateFlow()
@@ -90,7 +91,7 @@ internal class MainViewModel(
 
     private fun handleRetrySuccess(coinList: List<Coin>): CoinListState {
         return CoinListState.Content(
-            items = coinList.toImmutableList(),
+            items = coinListMapper.map(coinList),
             loadMore = CoinListState.LoadState.NotLoaded,
             refresh = CoinListState.LoadState.NotLoaded
         )
@@ -99,7 +100,7 @@ internal class MainViewModel(
     private fun handleLoadMoreSuccess(coinList: List<Coin>): CoinListState {
         return _state.value.mapContent {
             copy(
-                items = coinList.toImmutableList(),
+                items = coinListMapper.map(coinList),
                 loadMore = CoinListState.LoadState.NotLoaded
             )
         }
@@ -114,7 +115,7 @@ internal class MainViewModel(
     private fun handleRefreshSuccess(coinList: List<Coin>): CoinListState {
         return _state.value.mapContent {
             copy(
-                items = coinList.toImmutableList(),
+                items = coinListMapper.map(coinList),
                 refresh = CoinListState.LoadState.NotLoaded
             )
         }

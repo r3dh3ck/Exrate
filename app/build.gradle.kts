@@ -51,6 +51,8 @@ dependencies {
     implementation(projects.feature.settings)
     implementation(projects.network)
     implementation(libs.activity.compose)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.material)
     implementation(libs.compose.navigation)

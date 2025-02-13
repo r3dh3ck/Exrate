@@ -1,7 +1,6 @@
 package com.example.feature.coin.ui.details
 
 import androidx.compose.runtime.Immutable
-import com.example.feature.coin.domain.Coin
 
 @Immutable
 internal sealed interface CoinDetailsState {
@@ -12,6 +11,6 @@ internal sealed interface CoinDetailsState {
 
     @JvmInline
     value class Content(
-        val coin: Coin
+        val coin: CoinDetailsUiModel
     ) : CoinDetailsState
 }

@@ -4,9 +4,8 @@ import com.example.feature.currency.CurrencyRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-class Initializer @Inject constructor(
+class Initializer(
     private val currencyRepository: CurrencyRepository
 ) {
 

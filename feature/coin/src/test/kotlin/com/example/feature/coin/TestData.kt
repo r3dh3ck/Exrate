@@ -1,92 +1,47 @@
 package com.example.feature.coin
 
-import com.example.feature.coin.domain.Coin
-import com.example.feature.currency.Currency
 import com.example.network.CoinResponse
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toImmutableList
-
-val pageSize: Int = 50
 
 val bitcoinCoinResponse: CoinResponse = CoinResponse(
     id = "btc",
+    symbol = "btc",
     name = "Bitcoin",
+    image = "btc_url",
     currentPrice = "95000",
-    marketCap = "950000",
+    marketCap = 950000L,
     marketCapRank = "1"
 )
 
 val ethereumCoinResponse: CoinResponse = CoinResponse(
     id = "eth",
+    symbol = "eth",
     name = "Ethereum",
+    image = "eth_url",
     currentPrice = "3400",
-    marketCap = "34000",
+    marketCap = 34000L,
     marketCapRank = "2"
 )
 
 val solanaCoinResponse: CoinResponse = CoinResponse(
     id = "sol",
+    symbol = "sol",
     name = "Solana",
+    image = "sol_url",
     currentPrice = "192.44",
-    marketCap = "19200",
+    marketCap = 19200L,
     marketCapRank = "6"
 )
 
-val bitcoinCoin: Coin = Coin(
-    id = "btc",
-    name = "Bitcoin",
-    price = "95000",
-    marketCap = "950000",
-    rank = "1",
-    currency = Currency.USD
-)
-
-val ethereumCoin: Coin = Coin(
-    id = "eth",
-    name = "Ethereum",
-    price = "3400",
-    marketCap = "34000",
-    rank = "2",
-    currency = Currency.USD
-)
-
-val solanaCoin: Coin = Coin(
-    id = "sol",
-    name = "Solana",
-    price = "192.44",
-    marketCap = "19200",
-    rank = "6",
-    currency = Currency.USD
-)
-
 val coinResponseList: List<CoinResponse> = buildList {
-    repeat(pageSize / 2) {
+    repeat(25) {
         add(bitcoinCoinResponse)
         add(ethereumCoinResponse)
     }
 }
 
 val coinResponseList2Page: List<CoinResponse> = buildList {
-    repeat(pageSize / 2) {
+    repeat(25) {
         add(solanaCoinResponse)
         add(bitcoinCoinResponse)
     }
 }
-
-val coinList: ImmutableList<Coin> = buildList {
-    repeat(pageSize / 2) {
-        add(bitcoinCoin)
-        add(ethereumCoin)
-    }
-}.toImmutableList()
-
-val coinList2Pages: ImmutableList<Coin> = buildList {
-    repeat(pageSize / 2) {
-        add(bitcoinCoin)
-        add(ethereumCoin)
-    }
-    repeat(pageSize / 2) {
-        add(solanaCoin)
-        add(bitcoinCoin)
-    }
-}.toImmutableList()

@@ -12,26 +12,49 @@ import com.example.network.CoingeckoApi
 import dagger.Module
 import dagger.Provides
 import kotlinx.serialization.json.Json
+import okhttp3.Cache
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import retrofit2.create
+import java.io.File
 
 @Module
 object AppModule {
 
     @Provides
     @AppScope
-    fun provideCoingeckoApi(): CoingeckoApi {
+    fun provideOkhttpClient(context: Application): OkHttpClient {
+        val size10mb = 10L * 1024L * 1024L
+        val cache = Cache(
+            directory = File(context.cacheDir, "okHttp_cache"),
+            maxSize = size10mb
+        )
+        return OkHttpClient.Builder()
+            .cache(cache)
+            .build()
+    }
+
+    @Provides
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         val json = Json {
             isLenient = true
             ignoreUnknownKeys = true
         }
         val contentType = "application/json; charset=UTF8".toMediaType()
         val converterFactory = json.asConverterFactory(contentType)
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://api.coingecko.com/api/v3/")
+        return Retrofit.Builder()
+            .baseUrl("http://127.0.0.1")
+            .client(okHttpClient)
             .addConverterFactory(converterFactory)
+            .build()
+    }
+
+    @Provides
+    fun provideCoingeckoApi(retrofit: Retrofit): CoingeckoApi {
+        val retrofit = retrofit.newBuilder()
+            .baseUrl("https://api.coingecko.com/api/v3/")
             .build()
         return retrofit.create<CoingeckoApi>()
     }

@@ -3,8 +3,8 @@ package com.example.feature.coin
 import app.cash.turbine.test
 import app.cash.turbine.turbineScope
 import com.example.datastore.currency.CurrencyDataStore
-import com.example.feature.coin.data.CoinRepositoryImpl
-import com.example.feature.coin.domain.CoinPaginationUseCaseImpl
+import com.example.feature.coin.data.CoinRepository
+import com.example.feature.coin.domain.CoinPaginationUseCase
 import com.example.feature.coin.ui.main.MainEffect
 import com.example.feature.coin.ui.main.MainViewModel
 import com.example.feature.coin.ui.main.coinlist.CoinListState
@@ -20,8 +20,8 @@ class MainTest {
 
     private val api = mockk<CoingeckoApi>()
     private val dataStore = mockk<CurrencyDataStore>()
-    private val repository = CoinRepositoryImpl(api, dataStore)
-    private val useCase = CoinPaginationUseCaseImpl(repository)
+    private val repository = CoinRepository(api, dataStore)
+    private val useCase = CoinPaginationUseCase(repository)
     private val viewModel = MainViewModel(useCase)
 
     @Test
@@ -30,21 +30,21 @@ class MainTest {
         coEvery {
             api.getMarkets(
                 vsCurrency = "usd",
-                perPage = pageSize,
+                perPage = 50,
                 page = 1
             )
         } returns coinResponseList
         coEvery {
             api.getMarkets(
                 vsCurrency = "usd",
-                perPage = pageSize,
+                perPage = 50,
                 page = 2
             )
         } returns coinResponseList2Page
         viewModel.state.test {
             assertEquals(CoinListState.Loading, awaitItem())
             val successState = CoinListState.Content(
-                items = coinList,
+                items = coinItemList,
                 loadMore = CoinListState.LoadState.NotLoaded,
                 refresh = CoinListState.LoadState.NotLoaded
             )
@@ -55,7 +55,7 @@ class MainTest {
             )
             assertEquals(loadMoreLoadingState, awaitItem())
             val loadMoreSuccessState = loadMoreLoadingState.copy(
-                items = coinList2Pages,
+                items = coinItemList2Pages,
                 loadMore = CoinListState.LoadState.NotLoaded
             )
             assertEquals(loadMoreSuccessState, awaitItem())
@@ -65,7 +65,7 @@ class MainTest {
             )
             assertEquals(refreshLoadingState, awaitItem())
             val refreshSuccessState = refreshLoadingState.copy(
-                items = coinList,
+                items = coinItemList,
                 refresh = CoinListState.LoadState.NotLoaded
             )
             assertEquals(refreshSuccessState, awaitItem())
@@ -78,21 +78,21 @@ class MainTest {
         coEvery {
             api.getMarkets(
                 vsCurrency = "usd",
-                perPage = pageSize,
+                perPage = 50,
                 page = 1
             )
         } returns coinResponseList
         coEvery {
             api.getMarkets(
                 vsCurrency = "usd",
-                perPage = pageSize,
+                perPage = 50,
                 page = 2
             )
         } throws Throwable()
         viewModel.state.test {
             assertEquals(CoinListState.Loading, awaitItem())
             val successState = CoinListState.Content(
-                items = coinList,
+                items = coinItemList,
                 loadMore = CoinListState.LoadState.NotLoaded,
                 refresh = CoinListState.LoadState.NotLoaded
             )
@@ -115,7 +115,7 @@ class MainTest {
         coEvery {
             api.getMarkets(
                 vsCurrency = "usd",
-                perPage = pageSize,
+                perPage = 50,
                 page = 1
             )
         } returns coinResponseList andThenThrows Throwable()
@@ -124,7 +124,7 @@ class MainTest {
             val effectFlow = viewModel.effect.testIn(backgroundScope)
             assertEquals(CoinListState.Loading, stateFlow.awaitItem())
             val successState = CoinListState.Content(
-                items = coinList,
+                items = coinItemList,
                 loadMore = CoinListState.LoadState.NotLoaded,
                 refresh = CoinListState.LoadState.NotLoaded
             )

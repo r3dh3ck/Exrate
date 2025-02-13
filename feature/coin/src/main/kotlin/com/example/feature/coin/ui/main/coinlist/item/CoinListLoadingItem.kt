@@ -1,4 +1,4 @@
-package com.example.feature.coin.ui.main.coinlist
+package com.example.feature.coin.ui.main.coinlist.item
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.defaultMinSize
@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
-data object CoinListLoadingItem {
+internal data object CoinListLoadingItem {
     val key: String = toString()
 }
 

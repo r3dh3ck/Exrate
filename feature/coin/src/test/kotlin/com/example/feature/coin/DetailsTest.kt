@@ -2,8 +2,9 @@ package com.example.feature.coin
 
 import app.cash.turbine.test
 import com.example.datastore.currency.CurrencyDataStore
-import com.example.feature.coin.data.CoinRepositoryImpl
+import com.example.feature.coin.data.CoinRepository
 import com.example.feature.coin.ui.details.CoinDetailsState
+import com.example.feature.coin.ui.details.CoinDetailsUiModel
 import com.example.feature.coin.ui.details.DetailsState
 import com.example.feature.coin.ui.details.DetailsViewModel
 import com.example.feature.currency.Currency
@@ -18,7 +19,7 @@ class DetailsTest {
 
     private val api = mockk<CoingeckoApi>()
     private val dataStore = mockk<CurrencyDataStore>()
-    private val repository = CoinRepositoryImpl(api, dataStore)
+    private val repository = CoinRepository(api, dataStore)
     private val viewModel = DetailsViewModel(repository)
     private val initState = DetailsState(
         topAppBarTitle = "",
@@ -31,17 +32,23 @@ class DetailsTest {
         coEvery {
             api.getMarkets(
                 vsCurrency = "usd",
-                perPage = 20,
+                perPage = 50,
                 page = 1
             )
         } returns coinResponseList
+        val ethereumDetails = CoinDetailsUiModel(
+            name = "Ethereum",
+            rank = "2",
+            marketCap = "34,000 USD",
+            price = "3,400 USD"
+        )
         val successState = DetailsState(
             topAppBarTitle = "Ethereum",
-            coinDetails = CoinDetailsState.Content(ethereumCoin)
+            coinDetails = CoinDetailsState.Content(ethereumDetails)
         )
         viewModel.state.test {
             assertEquals(initState, awaitItem())
-            repository.getCoinList(pageSize = 20, page = 1)
+            repository.getCoinList(pageSize = 50, page = 1)
             viewModel.getCoin("eth")
             assertEquals(successState, awaitItem())
         }

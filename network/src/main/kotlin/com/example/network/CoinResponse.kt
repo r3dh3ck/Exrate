@@ -7,12 +7,16 @@ import kotlinx.serialization.Serializable
 class CoinResponse(
     @SerialName("id")
     val id: String,
+    @SerialName("symbol")
+    val symbol: String,
     @SerialName("name")
     val name: String,
+    @SerialName("image")
+    val image: String,
     @SerialName("current_price")
     val currentPrice: String,
     @SerialName("market_cap")
-    val marketCap: String,
+    val marketCap: Long,
     @SerialName("market_cap_rank")
     val marketCapRank: String
 )

@@ -22,6 +22,11 @@ android {
     buildFeatures {
         compose = true
     }
+    composeCompiler {
+//        enableStrongSkippingMode = true
+        reportsDestination = layout.buildDirectory.dir("compose_compiler")
+        metricsDestination = layout.buildDirectory.dir("compose_compiler")
+    }
 }
 
 dependencies {
@@ -31,6 +36,7 @@ dependencies {
     implementation(projects.network)
     implementation(projects.widget)
     implementation(platform(libs.compose.bom))
+    implementation(libs.coil.compose)
     implementation(libs.compose.material)
     implementation(libs.compose.material.icons.core)
     implementation(libs.compose.navigation)

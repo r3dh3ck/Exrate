@@ -13,6 +13,7 @@ class ExrateApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         ComponentInitializer(appComponent).initialize()
-        appComponent.initializer.initialize()
+        CoilInitializer(this, appComponent.okHttpClient).initialize()
+        Initializer(appComponent.currencyRepository).initialize()
     }
 }

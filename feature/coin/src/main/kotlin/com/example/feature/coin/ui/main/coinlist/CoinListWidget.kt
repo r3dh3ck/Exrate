@@ -31,7 +31,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.core.lazyListItemPosition
 import com.example.feature.coin.R
-import com.example.feature.coin.domain.Coin
+import com.example.feature.coin.ui.main.coinlist.item.CoinItem
+import com.example.feature.coin.ui.main.coinlist.item.CoinListErrorItem
+import com.example.feature.coin.ui.main.coinlist.item.CoinListItem
+import com.example.feature.coin.ui.main.coinlist.item.CoinListLoadingItem
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.filter
 import com.example.core.R as coreR
@@ -108,7 +111,7 @@ private fun Content(
     contentPadding: PaddingValues,
     onLoadMore: () -> Unit,
     onRetry: () -> Unit,
-    onCoinClicked: (Coin) -> Unit
+    onCoinClicked: (String) -> Unit
 ) {
     val lazyListState = rememberLazyListState()
     LazyColumn(
@@ -118,13 +121,13 @@ private fun Content(
     ) {
         itemsIndexed(
             items = state.items,
-            key = { _, coin -> coin.id },
+            key = { _, coinItem -> coinItem.id },
             contentType = { _, _ -> CoinListItem }
-        ) { index, coin ->
+        ) { index, coinItem ->
             CoinListItem(
-                coin = coin,
+                coinItem = coinItem,
                 modifier = Modifier.padding(top = 2.dp)
-                    .clickable { onCoinClicked(coin) }
+                    .clickable { onCoinClicked(coinItem.id) }
                     .lazyListItemPosition(index)
             )
         }
@@ -210,9 +213,24 @@ private fun LoadingPreview() {
 @Composable
 private fun ContentPreview() {
     val items = persistentListOf(
-        Coin.newInstance(name = "Bitcoin", price = "100000"),
-        Coin.newInstance(name = "Ethereum", price = "3500.53"),
-        Coin.newInstance(name = "USDT", price = "0.99")
+        CoinItem.newInstance(
+            id = "btc",
+            symbol = "btc",
+            name = "Bitcoin",
+            price = "100,000 USD"
+        ),
+        CoinItem.newInstance(
+            id = "eth",
+            symbol = "eth",
+            name = "Ethereum",
+            price = "3,500.53 USD"
+        ),
+        CoinItem.newInstance(
+            id = "usdt",
+            symbol = "usdt",
+            name = "Tether",
+            price = "0.99 USD"
+        )
     )
     val state = CoinListState.Content(
         items = items,

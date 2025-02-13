@@ -2,7 +2,7 @@ package com.example.exrate.screen.main
 
 import androidx.compose.ui.semantics.SemanticsNode
 import androidx.compose.ui.test.SemanticsNodeInteractionsProvider
-import com.example.feature.coin.ui.main.coinlist.COIN_LIST_ITEM_PRICE_TEST_TAG
+import com.example.feature.coin.ui.main.coinlist.item.COIN_LIST_ITEM_PRICE_TEST_TAG
 import io.github.kakaocup.compose.node.element.KNode
 import io.github.kakaocup.compose.node.element.lazylist.KLazyListItemNode
 

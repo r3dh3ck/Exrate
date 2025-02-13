@@ -13,8 +13,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.feature.coin.R
-import com.example.feature.coin.domain.Coin
-import com.example.feature.currency.Currency
 import com.example.widget.OneLineWidget
 import com.example.core.R as coreR
 
@@ -34,7 +32,7 @@ internal fun CoinDetailsWidget(
 }
 
 @Composable
-private fun Content(coin: Coin, modifier: Modifier) {
+private fun Content(coin: CoinDetailsUiModel, modifier: Modifier) {
     Column(modifier) {
         OneLineWidget(
             label = stringResource(R.string.coin_details_market_cap_rank),
@@ -43,13 +41,13 @@ private fun Content(coin: Coin, modifier: Modifier) {
         )
         OneLineWidget(
             label = stringResource(R.string.coin_details_market_cap),
-            value = "${coin.marketCap} ${coin.currency.name.uppercase()}",
+            value = coin.marketCap,
             modifier = Modifier.padding(top = 2.dp)
                 .testTag(COIN_DETAILS_WIDGET_MARKET_CAP_TEST_TAG)
         )
         OneLineWidget(
             label = stringResource(R.string.coin_details_current_price),
-            value = "${coin.price} ${coin.currency.name.uppercase()}",
+            value = coin.price,
             modifier = Modifier.padding(top = 2.dp)
                 .testTag(COIN_DETAILS_WIDGET_PRICE_TEST_TAG)
         )
@@ -71,11 +69,11 @@ private fun Error(modifier: Modifier) {
 @Preview(showBackground = true)
 @Composable
 private fun CoinDetailsWidgetContentPreview() {
-    val coin = Coin.newInstance(
-        price = "3250.50",
-        marketCap = "1000000000",
-        rank = "2",
-        currency = Currency(name = "usd")
+    val coin = CoinDetailsUiModel(
+        name = "Ethereum",
+        price = "3,250.50 USD",
+        marketCap = "1,000,000,000 USD",
+        rank = "2"
     )
     val state = CoinDetailsState.Content(coin)
     CoinDetailsWidget(state)

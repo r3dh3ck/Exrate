@@ -25,8 +25,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.feature.coin.di.CoinComponentHolder
-import com.example.feature.coin.domain.Coin
 import com.example.feature.coin.navigation.SelectCurrencyResult
+import com.example.feature.coin.ui.main.coinlist.item.CoinItem
 import com.example.feature.coin.ui.main.coinlist.CoinListAction
 import com.example.feature.coin.ui.main.coinlist.CoinListState
 import com.example.feature.coin.ui.main.coinlist.CoinListWidget
@@ -39,7 +39,7 @@ const val MAIN_SCREEN_TEST_TAG = "main_screen_test_tag"
 internal fun MainScreen(
     selectCurrencyResult: SelectCurrencyResult,
     onSettingsClicked: () -> Unit,
-    onCoinClicked: (Coin) -> Unit
+    onCoinClicked: (String) -> Unit
 ) {
     val component = CoinComponentHolder.get()
     val viewModelFactory = component.viewModelFactory
@@ -87,7 +87,7 @@ private fun MainScreen(
     viewModel: MainViewModel,
     snackbarHostState: SnackbarHostState,
     onSettingsClicked: () -> Unit,
-    onCoinClicked: (Coin) -> Unit
+    onCoinClicked: (String) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle(
         minActiveState = Lifecycle.State.STARTED
@@ -102,7 +102,7 @@ private fun MainScreen(
                 is CoinListAction.LoadMore -> viewModel.loadMore()
                 is CoinListAction.RetryLoadMore -> viewModel.loadMore()
                 is CoinListAction.Refresh -> viewModel.refresh()
-                is CoinListAction.CoinClicked -> onCoinClicked(action.coin)
+                is CoinListAction.CoinClicked -> onCoinClicked(action.coinId)
             }
         }}
     )
@@ -143,9 +143,24 @@ private fun MainScreen(
 @Composable
 private fun MainScreenPreview() {
     val items = persistentListOf(
-        Coin.newInstance(name = "Bitcoin", price = "100000"),
-        Coin.newInstance(name = "Ethereum", price = "3500.53"),
-        Coin.newInstance(name = "USDT", price = "0.99")
+        CoinItem.newInstance(
+            id = "btc",
+            symbol = "btc",
+            name = "Bitcoin",
+            price = "100,000 USD"
+        ),
+        CoinItem.newInstance(
+            id = "eth",
+            symbol = "eth",
+            name = "Ethereum",
+            price = "3,500.53 USD"
+        ),
+        CoinItem.newInstance(
+            id = "usdt",
+            symbol = "usdt",
+            name = "Tether",
+            price = "0.99 USD"
+        )
     )
     val state = CoinListState.Content(
         items = items,

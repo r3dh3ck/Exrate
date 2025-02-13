@@ -1,4 +1,4 @@
-package com.example.feature.coin.ui.main.coinlist
+package com.example.feature.coin.ui.main.coinlist.item
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.defaultMinSize
@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.example.feature.coin.R
 import com.example.core.R as coreR
 
-data object CoinListErrorItem {
+internal data object CoinListErrorItem {
     val key: String = toString()
 }
 

@@ -2,8 +2,8 @@ package com.example.feature.coin.ui.details
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.feature.coin.data.CoinRepository
 import com.example.feature.coin.domain.Coin
-import com.example.feature.coin.domain.CoinRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,6 +14,7 @@ internal class DetailsViewModel(
     private val repository: CoinRepository
 ) : ViewModel() {
 
+    private val mapper = CoinDetailsMapper()
     private val _state = MutableStateFlow<DetailsState>(createEmptyState())
     val state: StateFlow<DetailsState> = _state.asStateFlow()
 
@@ -36,9 +37,10 @@ internal class DetailsViewModel(
     }
 
     private fun createSuccessState(coin: Coin): DetailsState {
+        val coinDetails = mapper.map(coin)
         return DetailsState(
             topAppBarTitle = coin.name,
-            coinDetails = CoinDetailsState.Content(coin)
+            coinDetails = CoinDetailsState.Content(coinDetails)
         )
     }
 

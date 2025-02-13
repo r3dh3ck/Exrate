@@ -7,7 +7,7 @@ import dagger.Component
     modules = [CoinModule::class],
     dependencies = [CoinDependencies::class]
 )
-interface CoinComponent {
+abstract class CoinComponent {
 
-    val viewModelFactory: CoinViewModelFactory
+    internal abstract val viewModelFactory: CoinViewModelFactory
 }

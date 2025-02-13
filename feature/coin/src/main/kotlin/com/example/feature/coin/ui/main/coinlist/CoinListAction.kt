@@ -1,7 +1,5 @@
 package com.example.feature.coin.ui.main.coinlist
 
-import com.example.feature.coin.domain.Coin
-
 internal sealed interface CoinListAction {
 
     data object Retry : CoinListAction
@@ -14,6 +12,6 @@ internal sealed interface CoinListAction {
 
     @JvmInline
     value class CoinClicked(
-        val coin: Coin
+        val coinId: String
     ) : CoinListAction
 }
